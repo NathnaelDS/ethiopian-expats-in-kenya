@@ -5,7 +5,11 @@ import { fetchMembers } from '../lib/sheets';
 const members = await fetchMembers();
 
 // Get unique industries for filter dropdown
-const industries = [...new Set(members.map(m => m.industry))].filter(Boolean).sort();
+// Split comma-separated industries and flatten into unique list
+const allIndustries = members.flatMap(m =>
+  m.industry.split(',').map(i => i.trim())
+).filter(Boolean);
+const industries = [...new Set(allIndustries)].sort();
 
 // Get unique locations for filter dropdown
 const locations = [...new Set(members.map(m => m.location))].filter(Boolean).sort();
@@ -131,7 +135,13 @@ const description = 'Directory of Ethiopian expats in Kenya';
               <!-- Industry -->
               <div class="flex items-start">
                 <span class="text-gray-500 w-20 flex-shrink-0">Industry:</span>
-                <span class="text-gray-900 font-medium">{member.industry}</span>
+                <div class="flex flex-wrap gap-1">
+                  {member.industry.split(',').map((ind) => (
+                    <span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">
+                      {ind.trim()}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               <!-- Location -->
@@ -237,8 +247,9 @@ const description = 'Directory of Ethiopian expats in Kenya';
             profession.includes(searchTerm) ||
             skills.includes(searchTerm);
 
-          // Check industry filter
-          const matchesIndustry = !selectedIndustry || industry === selectedIndustry;
+          // Check industry filter (handle comma-separated industries)
+          const matchesIndustry = !selectedIndustry ||
+            industry.split(',').map(i => i.trim()).includes(selectedIndustry);
 
           // Check location filter
           const matchesLocation = !selectedLocation || location === selectedLocation;
