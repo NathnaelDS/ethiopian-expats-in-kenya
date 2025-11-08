@@ -44,7 +44,6 @@ export async function fetchMembers(): Promise<Member[]> {
 
 function parseCSV(csvText: string): Member[] {
   const lines = csvText.split("\n");
-  console.log(lines);
 
   // Skip header row
   const dataLines = lines.slice(1);
@@ -54,13 +53,34 @@ function parseCSV(csvText: string): Member[] {
   for (const line of dataLines) {
     if (!line.trim()) continue;
 
-    // Simple CSV parsing (handles quoted fields)
-    const fields = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-    const cleanFields = fields.map((field) =>
-      field.replace(/^"|"$/g, "").trim()
-    );
+    // Proper CSV parsing that handles quoted fields with commas
+    const fields: string[] = [];
+    let currentField = "";
+    let inQuotes = false;
 
-    if (cleanFields.length < 8) continue;
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+
+      if (char === '"') {
+        // Toggle quote state
+        inQuotes = !inQuotes;
+      } else if (char === "," && !inQuotes) {
+        // End of field
+        fields.push(currentField.trim());
+        currentField = "";
+      } else {
+        // Add character to current field
+        currentField += char;
+      }
+    }
+
+    // Don't forget the last field
+    if (currentField) {
+      fields.push(currentField.trim());
+    }
+
+    // Skip lines that don't have all required fields
+    if (fields.length < 8) continue;
 
     const [
       timestamp,
@@ -71,7 +91,7 @@ function parseCSV(csvText: string): Member[] {
       industry,
       skills,
       location,
-    ] = cleanFields;
+    ] = fields;
 
     members.push({
       timestamp,
