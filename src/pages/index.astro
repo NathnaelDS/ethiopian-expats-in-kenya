@@ -1,0 +1,281 @@
+---
+import '../styles/global.css';
+import { fetchMembers } from '../lib/sheets';
+
+const members = await fetchMembers();
+
+// Get unique industries for filter dropdown
+const industries = [...new Set(members.map(m => m.industry))].filter(Boolean).sort();
+
+// Get unique locations for filter dropdown
+const locations = [...new Set(members.map(m => m.location))].filter(Boolean).sort();
+
+const title = 'ETinKE Member Directory';
+const description = 'Directory of Ethiopian expats in Kenya';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-green-600 to-yellow-500 text-white shadow-lg">
+      <div class="container mx-auto px-4 py-6">
+        <div class="text-center">
+          <h1 class="text-3xl md:text-4xl font-bold mb-2">🇪🇹 ETinKE Directory</h1>
+          <p class="text-green-50 text-lg">Ethiopian Expats in Kenya</p>
+          <p class="text-green-100 text-sm mt-2">
+            <span class="font-semibold">{members.length}</span> members
+            <span class="mx-2">•</span>
+            Next meetup: First Friday of the month
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-7xl">
+      <!-- Search and Filters -->
+      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div class="space-y-4">
+          <!-- Search Bar -->
+          <div>
+            <label for="search" class="block text-sm font-medium text-gray-700 mb-2">
+              Search Members
+            </label>
+            <input
+              type="text"
+              id="search"
+              placeholder="Search by name, profession, or skills..."
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            />
+          </div>
+
+          <!-- Filters Row -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Industry Filter -->
+            <div>
+              <label for="industry-filter" class="block text-sm font-medium text-gray-700 mb-2">
+                Industry
+              </label>
+              <select
+                id="industry-filter"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              >
+                <option value="">All Industries</option>
+                {industries.map(industry => (
+                  <option value={industry}>{industry}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Location Filter -->
+            <div>
+              <label for="location-filter" class="block text-sm font-medium text-gray-700 mb-2">
+                Location
+              </label>
+              <select
+                id="location-filter"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              >
+                <option value="">All Locations</option>
+                {locations.map(location => (
+                  <option value={location}>{location}</option>
+                ))}
+              </select>
+            </div>
+
+            <!-- Clear Filters -->
+            <div class="flex items-end">
+              <button
+                id="clear-filters"
+                class="w-full px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Count -->
+        <div class="mt-4 text-sm text-gray-600">
+          Showing <span id="results-count" class="font-semibold">{members.length}</span> members
+        </div>
+      </div>
+
+      <!-- Member Cards Grid -->
+      <div id="members-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {members.map((member) => (
+          <div
+            class="member-card bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow p-6"
+            data-name={member.name.toLowerCase()}
+            data-profession={member.profession.toLowerCase()}
+            data-industry={member.industry}
+            data-location={member.location}
+            data-skills={member.skills.toLowerCase()}
+          >
+            <!-- Member Name -->
+            <div class="mb-4">
+              <h2 class="text-xl font-bold text-gray-900">{member.name}</h2>
+              <p class="text-green-600 font-medium">{member.profession}</p>
+            </div>
+
+            <!-- Member Details -->
+            <div class="space-y-3 text-sm">
+              <!-- Industry -->
+              <div class="flex items-start">
+                <span class="text-gray-500 w-20 flex-shrink-0">Industry:</span>
+                <span class="text-gray-900 font-medium">{member.industry}</span>
+              </div>
+
+              <!-- Location -->
+              {member.location && (
+                <div class="flex items-start">
+                  <span class="text-gray-500 w-20 flex-shrink-0">Location:</span>
+                  <span class="text-gray-900">{member.location}</span>
+                </div>
+              )}
+
+              <!-- Phone -->
+              <div class="flex items-start">
+                <span class="text-gray-500 w-20 flex-shrink-0">Phone:</span>
+                <a
+                  href={`tel:${member.phone}`}
+                  class="text-green-600 hover:text-green-700 font-medium"
+                >
+                  {member.phone}
+                </a>
+              </div>
+
+              <!-- LinkedIn -->
+              {member.linkedin && (
+                <div class="flex items-start">
+                  <span class="text-gray-500 w-20 flex-shrink-0">LinkedIn:</span>
+                  <a
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:text-blue-700 font-medium truncate"
+                  >
+                    View Profile
+                  </a>
+                </div>
+              )}
+
+              <!-- Skills -->
+              {member.skills && (
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                  <span class="text-gray-500 text-xs uppercase tracking-wide mb-2 block">
+                    Skills & Expertise
+                  </span>
+                  <div class="flex flex-wrap gap-2">
+                    {member.skills.split(',').map((skill) => (
+                      <span class="px-2 py-1 bg-green-50 text-green-700 text-xs rounded-full">
+                        {skill.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <!-- No Results Message -->
+      <div id="no-results" class="hidden text-center py-12">
+        <div class="text-gray-400 text-6xl mb-4">🔍</div>
+        <h3 class="text-xl font-semibold text-gray-700 mb-2">No members found</h3>
+        <p class="text-gray-500">Try adjusting your search or filters</p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+      <div class="container mx-auto px-4 py-6 text-center text-gray-600 text-sm">
+        <p>ETinKE - Ethiopian Expats in Kenya</p>
+        <p class="mt-2">We meet on the first Friday of every month</p>
+      </div>
+    </footer>
+
+    <!-- Search & Filter Script -->
+    <script>
+      // Get all member cards
+      const memberCards = document.querySelectorAll('.member-card') as NodeListOf<HTMLElement>;
+      const searchInput = document.getElementById('search') as HTMLInputElement;
+      const industryFilter = document.getElementById('industry-filter') as HTMLSelectElement;
+      const locationFilter = document.getElementById('location-filter') as HTMLSelectElement;
+      const clearFiltersBtn = document.getElementById('clear-filters') as HTMLButtonElement;
+      const resultsCount = document.getElementById('results-count') as HTMLElement;
+      const noResults = document.getElementById('no-results') as HTMLElement;
+      const membersGrid = document.getElementById('members-grid') as HTMLElement;
+
+      function filterMembers() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedIndustry = industryFilter.value;
+        const selectedLocation = locationFilter.value;
+
+        let visibleCount = 0;
+
+        memberCards.forEach((card) => {
+          const name = card.dataset.name || '';
+          const profession = card.dataset.profession || '';
+          const skills = card.dataset.skills || '';
+          const industry = card.dataset.industry || '';
+          const location = card.dataset.location || '';
+
+          // Check search match
+          const matchesSearch =
+            !searchTerm ||
+            name.includes(searchTerm) ||
+            profession.includes(searchTerm) ||
+            skills.includes(searchTerm);
+
+          // Check industry filter
+          const matchesIndustry = !selectedIndustry || industry === selectedIndustry;
+
+          // Check location filter
+          const matchesLocation = !selectedLocation || location === selectedLocation;
+
+          // Show/hide card
+          if (matchesSearch && matchesIndustry && matchesLocation) {
+            card.classList.remove('hidden');
+            visibleCount++;
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        // Update results count
+        resultsCount.textContent = visibleCount.toString();
+
+        // Show/hide no results message
+        if (visibleCount === 0) {
+          membersGrid.classList.add('hidden');
+          noResults.classList.remove('hidden');
+        } else {
+          membersGrid.classList.remove('hidden');
+          noResults.classList.add('hidden');
+        }
+      }
+
+      // Add event listeners
+      searchInput.addEventListener('input', filterMembers);
+      industryFilter.addEventListener('change', filterMembers);
+      locationFilter.addEventListener('change', filterMembers);
+
+      clearFiltersBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        industryFilter.value = '';
+        locationFilter.value = '';
+        filterMembers();
+      });
+    </script>
+  </body>
+</html>

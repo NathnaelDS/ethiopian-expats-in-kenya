@@ -1,0 +1,14 @@
+name: Weekly Rebuild
+on:
+  schedule:
+    - cron: "0 12 * * 5" # Every Friday at noon UTC
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Trigger Netlify Deploy
+        run: |
+          curl -X POST -d {} https://api.netlify.com/build_hooks/690fa0c3e882c4e9eafac208
