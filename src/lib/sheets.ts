@@ -43,6 +43,12 @@ export async function fetchMembers(): Promise<Member[]> {
   }
 }
 
+// Normalize phone numbers: strip everything except digits, then add + prefix
+function sanitizePhone(phone: string): string {
+  const digitsOnly = phone.replace(/\D/g, '');
+  return digitsOnly ? `+${digitsOnly}` : '';
+}
+
 function parseCSV(csvText: string): Member[] {
   const lines = csvText.split("\n");
 
@@ -98,7 +104,7 @@ function parseCSV(csvText: string): Member[] {
     members.push({
       timestamp,
       name,
-      phone,
+      phone: sanitizePhone(phone),
       linkedin,
       profession,
       industry,
