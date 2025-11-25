@@ -14,8 +14,8 @@ const industries = [...new Set(allIndustries)].sort();
 // Get unique locations for filter dropdown
 const locations = [...new Set(members.map(m => m.location))].filter(Boolean).sort();
 
-const title = 'ETinKE Member Directory';
-const description = 'Directory of Ethiopian expats in Kenya';
+const title = 'Ethiopian Expats in Kenya | ETinKE';
+const description = 'A networking platform for Ethiopians living in Kenya to connect, collaborate, and support one another.';
 ---
 
 <!DOCTYPE html>
@@ -28,17 +28,68 @@ const description = 'Directory of Ethiopian expats in Kenya';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body class="bg-gray-50 min-h-screen">
-    <!-- Header -->
-    <header class="bg-gradient-to-r from-green-600 to-yellow-500 text-white shadow-lg">
-      <div class="container mx-auto px-4 py-6">
-        <div class="text-center">
-          <h1 class="text-3xl md:text-4xl font-bold mb-2">🇪🇹 ETinKE Directory</h1>
-          <p class="text-green-50 text-lg">Ethiopian Expats in Kenya</p>
-          <p class="text-green-100 text-sm mt-2">
-            <span class="font-semibold">{members.length}</span> members
-            <span class="mx-2">•</span>
-            Meeptups: First Friday of the month
+    <!-- Hero Section -->
+    <header class="bg-gradient-to-br from-green-700 via-green-600 to-yellow-500 text-white shadow-lg">
+      <div class="container mx-auto px-4 py-12 md:py-16">
+        <div class="text-center max-w-3xl mx-auto">
+          <!-- Main Title -->
+          <h1 class="text-3xl md:text-5xl font-bold mb-3">
+            🇪🇹 Ethiopian Expats in Kenya
+          </h1>
+
+          <!-- Tagline -->
+          <p class="text-green-100 text-lg md:text-xl font-medium mb-6">
+            Connect · Collaborate · Support One Another
           </p>
+
+          <!-- Divider -->
+          <div class="w-24 h-1 bg-yellow-400 mx-auto mb-6 rounded-full"></div>
+
+          <!-- Mission Snippet -->
+          <p class="text-green-50 text-base md:text-lg mb-8 leading-relaxed">
+            A community-driven platform for Ethiopians living, studying, and working in Kenya.
+          </p>
+
+          <!-- Benefits Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <div class="text-2xl mb-2">💼</div>
+              <div class="text-sm font-medium">Business Networking</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <div class="text-2xl mb-2">🤝</div>
+              <div class="text-sm font-medium">Professional Collaboration</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <div class="text-2xl mb-2">🎉</div>
+              <div class="text-sm font-medium">Social & Cultural Events</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+              <div class="text-2xl mb-2">💡</div>
+              <div class="text-sm font-medium">Jobs, Housing & Leads</div>
+            </div>
+          </div>
+
+          <!-- Meeting Info & Member Count -->
+          <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-green-100 text-sm mb-8">
+            <span class="flex items-center gap-2">
+              <span>📅</span> We meet: First Friday of every month
+            </span>
+            <span class="hidden md:inline">•</span>
+            <span class="flex items-center gap-2">
+              <span>👥</span> {members.length} members and growing
+            </span>
+          </div>
+
+          <!-- CTA Button -->
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLScQ4MpWhBHnMiXkYQ6M4xulW0YGXQBXInyyC2mBLi-Svs6t4A/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block bg-yellow-400 hover:bg-yellow-300 text-green-900 font-bold px-8 py-3 rounded-full transition-colors shadow-lg hover:shadow-xl"
+          >
+            Join the Community
+          </a>
         </div>
       </div>
     </header>
@@ -207,10 +258,13 @@ const description = 'Directory of Ethiopian expats in Kenya';
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-16">
-      <div class="container mx-auto px-4 py-6 text-center text-gray-600 text-sm">
-        <p>ETinKE - Ethiopian Expats in Kenya</p>
-        <p class="mt-2">We meet on the first Friday of every month</p>
+    <footer class="bg-green-800 text-white mt-16">
+      <div class="container mx-auto px-4 py-8 text-center">
+        <p class="font-semibold text-lg mb-2">🇪🇹 Ethiopian Expats in Kenya</p>
+        <p class="text-green-200 text-sm mb-4">United by our roots, inspired by our shared future.</p>
+        <p class="text-green-300 text-sm">
+          📅 We meet on the first Friday of every month
+        </p>
       </div>
     </footer>
 
