@@ -8,6 +8,7 @@ export interface Member {
   industry: string;
   skills: string;
   location: string;
+  consent: string;
 }
 
 // TODO: Replace this with your actual Google Sheets ID
@@ -80,7 +81,7 @@ function parseCSV(csvText: string): Member[] {
     }
 
     // Skip lines that don't have all required fields
-    if (fields.length < 8) continue;
+    if (fields.length < 9) continue;
 
     const [
       timestamp,
@@ -91,6 +92,7 @@ function parseCSV(csvText: string): Member[] {
       industry,
       skills,
       location,
+      consent,
     ] = fields;
 
     members.push({
@@ -102,6 +104,7 @@ function parseCSV(csvText: string): Member[] {
       industry,
       skills,
       location,
+      consent,
     });
   }
 
@@ -120,6 +123,7 @@ function getMockMembers(): Member[] {
       industry: "Technology",
       skills: "JavaScript, Python, Cloud Architecture, Team Leadership",
       location: "Nairobi",
+      consent: "I consent to share my information",
     },
     {
       timestamp: "2025-11-08 11:15:00",
@@ -130,6 +134,7 @@ function getMockMembers(): Member[] {
       industry: "Retail & E-commerce",
       skills: "Digital Marketing, Brand Strategy, Social Media, Analytics",
       location: "Nairobi",
+      consent: "I consent to share my information",
     },
     {
       timestamp: "2025-11-08 12:00:00",
@@ -140,6 +145,7 @@ function getMockMembers(): Member[] {
       industry: "Finance & Banking",
       skills: "Financial Modeling, Risk Analysis, Excel, Data Visualization",
       location: "Nairobi",
+      consent: "I consent to share my information",
     },
     {
       timestamp: "2025-11-08 13:30:00",
@@ -151,6 +157,7 @@ function getMockMembers(): Member[] {
       skills:
         "Healthcare Management, Operations, Compliance, Team Coordination",
       location: "Mombasa",
+      consent: "I consent to share my information",
     },
     {
       timestamp: "2025-11-08 14:20:00",
@@ -162,6 +169,7 @@ function getMockMembers(): Member[] {
       skills:
         "Strategy, Project Management, Business Development, Negotiations",
       location: "Nairobi",
+      consent: "I consent to share my information",
     },
     {
       timestamp: "2025-11-08 15:00:00",
@@ -172,6 +180,7 @@ function getMockMembers(): Member[] {
       industry: "Media & Entertainment",
       skills: "Adobe Creative Suite, Branding, UI/UX Design, Illustration",
       location: "Nairobi",
+      consent: "I consent to share my information",
     },
     {
       timestamp: "2025-11-08 16:45:00",
@@ -183,6 +192,7 @@ function getMockMembers(): Member[] {
       skills:
         "Project Planning, AutoCAD, Construction Management, Quality Control",
       location: "Nakuru",
+      consent: "I consent to share my information",
     },
     {
       timestamp: "2025-11-08 17:30:00",
@@ -194,6 +204,7 @@ function getMockMembers(): Member[] {
       skills:
         "Curriculum Development, Student Engagement, Assessment, Mentoring",
       location: "Kisumu",
+      consent: "I consent to share my information",
     },
   ];
 }
